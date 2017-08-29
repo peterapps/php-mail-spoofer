@@ -1,30 +1,10 @@
 <?php
-//fake mail sender
+//Email Spoofer
 
-
-define("PASSWORD","mahnamahna");
-
-
-$validpw = false;
-
-
-if(!isset($_POST['password']) || $_POST['password'] == '')
-{
-	$mail = '<div style="color:red">You need a password to send mail.  Be sure to enter it.</div>';
-	$validpw = false;
-} elseif($_POST['password'] != PASSWORD)
-{
-	$mail = '<div style="color:red">Invalid password.</div>';
-	$validpw = false;
-} else {
-	$validpw = true;
-}
-
-
-if(isset($_POST['to']) && isset($_POST['from']) && isset($_POST['fromname']) && isset($_POST['replyto']) && isset($_POST['subject']) && isset($_POST['message']) && $validpw)
+if(isset($_POST['send']) && isset($_POST['to']) && isset($_POST['from']) && isset($_POST['fromname']) && isset($_POST['subject']) && isset($_POST['message']))
 {
 	$headers = 'From: '.$_POST['fromname'].' <'.$_POST['from'].'>' . "\r\n" .
-	    'Reply-To: '. $_POST['replyto'] . "\r\n";
+	    'Reply-To: '. $_POST['from'] . "\r\n";
 
 	$mail = mail($_POST['to'],$_POST['subject'],$_POST['message'],$headers);
 	
@@ -34,11 +14,13 @@ if(isset($_POST['to']) && isset($_POST['from']) && isset($_POST['fromname']) && 
 	} else {
 		$mail = '<div style="color:red">Error</div>';
 	}
-} else {
+} elseif (isset($_POST['send'])) {
 	if(!isset($mail))
 	{
 		$mail = '<div style="color:red">Fill in all inputs</div>';
 	}
+} else {
+	$mail = '';	
 }
 
 
@@ -51,7 +33,7 @@ if(isset($_POST['to']) && isset($_POST['from']) && isset($_POST['fromname']) && 
 	</head>
 	<body>
 		<?php echo $mail; ?>
-		<form action="index.php" method="post">
+		<form action="?send=1" method="post">
 			<table border="0">
 				<tr>
 					<td>To: </td>
@@ -65,28 +47,15 @@ if(isset($_POST['to']) && isset($_POST['from']) && isset($_POST['fromname']) && 
 				<tr>
 					<td>Fake From Name: </td>
 					<td><input type="text" name="fromname"></td>
-				</tr>				
-				<tr>
-					<td>Reply to: </td>
-					<td><input type="text" name="replyto"></td>
 				</tr>
-				
 				<tr>
 					<td>Subject: </td>
 					<td><input type="text" name="subject"></td>
 				</tr>
-				
-				
 				<tr>
 					<td>Message: </td>
 					<td><textarea name="message"></textarea></td>
 				</tr>
-				
-				<tr>
-					<td>Password: </td>
-					<td><input type="password" name="password"></td>
-				</tr>
-				
 				<tr>
 					<td colspan="2">
 						<input type="submit" value="Send Email" />
