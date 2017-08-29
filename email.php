@@ -1,7 +1,7 @@
 <?php
 //Email Spoofer
 
-if(isset($_POST['send']) && isset($_POST['to']) && isset($_POST['from']) && isset($_POST['fromname']) && isset($_POST['subject']) && isset($_POST['message']))
+if(isset($_GET['send']) && isset($_POST['to']) && isset($_POST['from']) && isset($_POST['fromname']) && isset($_POST['subject']) && isset($_POST['message']))
 {
 	$headers = 'From: '.$_POST['fromname'].' <'.$_POST['from'].'>' . "\r\n" .
 	    'Reply-To: '. $_POST['from'] . "\r\n";
@@ -14,7 +14,7 @@ if(isset($_POST['send']) && isset($_POST['to']) && isset($_POST['from']) && isse
 	} else {
 		$mail = '<div style="color:red">Error</div>';
 	}
-} elseif (isset($_POST['send'])) {
+} elseif (isset($_GET['send'])) {
 	if(!isset($mail))
 	{
 		$mail = '<div style="color:red">Fill in all inputs</div>';
@@ -29,9 +29,15 @@ if(isset($_POST['send']) && isset($_POST['to']) && isset($_POST['from']) && isse
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Email Sender</title>
+		<title>Email Spoofer</title>
+		<style>
+			body {
+				font-family: sans-serif;
+			}
+		</style>
 	</head>
 	<body>
+		<h1>Email Spoofer</h1>
 		<?php echo $mail; ?>
 		<form action="?send=1" method="post">
 			<table border="0">
